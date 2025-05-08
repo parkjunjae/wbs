@@ -1,9 +1,12 @@
 package com.wbs.wbs.entity;
 
-import jakarta.persistence.*;
-import lombok.Builder;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 
 @Entity
 @Table(name = "total")
@@ -14,7 +17,7 @@ public class TotalEntity {
     @Column(name = "name_id")
     private Long id;
 
-    private String hardness;
+    private String longitude;
     private String latitude;
     private int battery;
 

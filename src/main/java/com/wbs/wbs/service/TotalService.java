@@ -1,15 +1,15 @@
 package com.wbs.wbs.service;
 
-import com.wbs.wbs.entity.TotalEntity;
-import com.wbs.wbs.repository.TotalRepository;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+
+import com.wbs.wbs.entity.TotalEntity;
+import com.wbs.wbs.repository.TotalRepository;
+
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @Data
@@ -20,9 +20,6 @@ public class TotalService {
 
     public List<TotalEntity> totalEntities(){
         List<TotalEntity> list = totalRepository.findAll();
-        if (list.isEmpty()){
-            return null;
-        }
         return list;
     }
 

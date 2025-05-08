@@ -1,20 +1,17 @@
 package com.wbs.wbs.controller;
 
-import com.wbs.wbs.dto.TotalDto;
-import com.wbs.wbs.entity.TotalEntity;
-import com.wbs.wbs.service.TotalService;
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import com.wbs.wbs.entity.TotalEntity;
+import com.wbs.wbs.service.TotalService;
+
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,13 +20,12 @@ public class TotalController {
 
 
     @GetMapping("/data")
-    public ResponseEntity<List<TotalDto>> totalEntities(){
+    public ResponseEntity<List<TotalEntity>> totalEntities(){
         List<TotalEntity> getTotal = totalService.totalEntities();
-        if (getTotal.isEmpty()){
-            return ResponseEntity.status(404).body(Collections.EMPTY_LIST);
+        if (getTotal == null || getTotal.isEmpty()) {
+            return ResponseEntity.noContent().build();  
         }
-        List<TotalDto> totalDTO = getTotal.stream().map(TotalDto::new).collect(Collectors.toList());
-        return ResponseEntity.ok(totalDTO);
+        return ResponseEntity.ok(getTotal);
     }
 
     @GetMapping("/data/{id}")
