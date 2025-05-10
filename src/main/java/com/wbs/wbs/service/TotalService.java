@@ -19,7 +19,7 @@ public class TotalService {
     private final TotalRepository totalRepository;
 
     public List<TotalEntity> totalEntities(){
-        List<TotalEntity> list = totalRepository.findAll();
+        List<TotalEntity> list = totalRepository.findAllByOrderByBatteryDesc();
         return list;
     }
 

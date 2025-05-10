@@ -17,7 +17,7 @@ public class DetailService {
 
 
     public List<DetailEntity> detailEntitys(){
-        List<DetailEntity> getDetail = detailRepository.findByDelYn("N");
+        List<DetailEntity> getDetail = detailRepository.findByDelYnOrderByTotalEntity_BatteryDesc("N");
         return getDetail;
     }
 

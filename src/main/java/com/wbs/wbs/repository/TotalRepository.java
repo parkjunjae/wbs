@@ -12,6 +12,6 @@ import java.util.Optional;
 @Repository
 public interface TotalRepository extends JpaRepository<TotalEntity, Long> {
 
-    List<TotalEntity> findAll();
+    List<TotalEntity> findAllByOrderByBatteryDesc();
     Optional<TotalEntity> findById(Long id);
 }

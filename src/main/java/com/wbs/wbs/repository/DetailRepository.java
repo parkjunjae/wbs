@@ -8,7 +8,7 @@ import com.wbs.wbs.entity.DetailEntity;
 
 public interface DetailRepository extends JpaRepository<DetailEntity, Long> {
 
-    List<DetailEntity> findByDelYn(String delYn);
+    List<DetailEntity> findByDelYnOrderByTotalEntity_BatteryDesc(String delYn);
 
 
 
