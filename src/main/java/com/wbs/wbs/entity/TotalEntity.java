@@ -19,7 +19,10 @@ public class TotalEntity {
 
     private String longitude;
     private String latitude;
+    
     private int battery;
+
+    private String delYn;
 
     @Column(name = "robot_condition")
     private String robotCondition;
