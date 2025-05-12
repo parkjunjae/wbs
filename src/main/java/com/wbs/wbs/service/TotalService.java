@@ -19,16 +19,23 @@ public class TotalService {
     private final TotalRepository totalRepository;
 
     public List<TotalEntity> totalEntities(){
-        List<TotalEntity> list = totalRepository.findAllByOrderByBatteryDesc();
+        List<TotalEntity> list = totalRepository.findByDelYnOrderByBatteryDesc("N");
         return list;
     }
 
-    public Optional<TotalEntity> findById(Long id){
-        Optional<TotalEntity> totalEntity = totalRepository.findById(id);
-        if (totalEntity.isEmpty()) {
-            return null;
+    
+
+    public Optional<TotalEntity> updateData(Long id){
+        Optional<TotalEntity> findOptional = totalRepository.findById(id);
+        if (findOptional.isEmpty()) {
+            return Optional.empty();
         }
-        return totalEntity;
+        
+        TotalEntity tEntity = findOptional.get();
+        tEntity.setDelYn("Y");
+        totalRepository.save(tEntity);
+
+        return Optional.of(tEntity);
     }
 
 }
