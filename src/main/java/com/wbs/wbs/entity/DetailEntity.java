@@ -1,9 +1,7 @@
 package com.wbs.wbs.entity;
 
 import java.sql.Timestamp;
-import java.util.Date;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -22,17 +20,24 @@ public class DetailEntity {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name="detail_id")
-    private Long id;
+    private Long detailId;
 
     private String type;
+
+    private String delYn;
+
+    private String image;
+
+    private String video;
+
+    private String comment;
+
+    private Timestamp registration;
+
 
     @ManyToOne
     @JoinColumn(name="name_id")
     TotalEntity totalEntity;
-
-    private String delYn;
-
-    private Timestamp registration;
 
     
 }

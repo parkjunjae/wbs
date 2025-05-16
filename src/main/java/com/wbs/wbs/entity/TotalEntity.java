@@ -12,6 +12,7 @@ import lombok.Data;
 @Table(name = "total")
 @Data
 public class TotalEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "name_id")
@@ -23,6 +24,8 @@ public class TotalEntity {
     private int battery;
 
     private String delYn;
+
+    private String mission;
 
     @Column(name = "robot_condition")
     private String robotCondition;
