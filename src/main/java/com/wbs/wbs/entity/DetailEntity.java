@@ -1,15 +1,10 @@
 package com.wbs.wbs.entity;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.List;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
@@ -26,8 +21,6 @@ public class DetailEntity {
 
     private String delYn;
 
-    private String image;
-
     private String video;
 
     private String comment;
@@ -39,5 +32,6 @@ public class DetailEntity {
     @JoinColumn(name="name_id")
     TotalEntity totalEntity;
 
-    
+    @OneToMany(mappedBy = "detailEntity", cascade = CascadeType.ALL)
+    private List<AudioEntity> audioEntities;
 }
