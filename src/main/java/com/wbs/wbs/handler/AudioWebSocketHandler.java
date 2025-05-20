@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UncheckedIOException;
+import java.nio.ByteBuffer;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -58,7 +59,9 @@ public class AudioWebSocketHandler extends BinaryWebSocketHandler {
 
     @Override
     protected void handleBinaryMessage(WebSocketSession session, BinaryMessage message){
-        byte[] payload = message.getPayload().array();
+        ByteBuffer buffer = message.getPayload();
+        byte[] payload = new byte[buffer.remaining()];
+        buffer.get(payload);
         String sessionId = getSessionId(session);
 
         if (sessionId == null || sessionId.equals(session.getId())) {
@@ -109,6 +112,15 @@ public class AudioWebSocketHandler extends BinaryWebSocketHandler {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    @Override
+    protected void handleTextMessage(WebSocketSession session, TextMessage message) {
+        String payload = message.getPayload();
+        if ("start".equals(payload)) {
+            System.out.println("▶️ React 클라이언트로부터 'start' 수신");
+            // sessionId 검증 및 상태 설정 등
         }
     }
 

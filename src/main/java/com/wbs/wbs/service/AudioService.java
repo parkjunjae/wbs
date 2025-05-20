@@ -32,6 +32,9 @@ public class AudioService {
                 System.err.println("❌ WAV 파일 없음: " + wavPath);
                 return false;
             }
+            
+            System.out.println("📁 wav 절대 경로: " + wavFile.getAbsolutePath());
+
     
             // DB 저장
             DetailEntity detailEntity = detailRepository.findById(detailId).orElseThrow();
