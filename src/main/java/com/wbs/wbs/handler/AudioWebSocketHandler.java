@@ -13,6 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.BinaryMessage;
 import org.springframework.web.socket.CloseStatus;
+import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.BinaryWebSocketHandler;
 
@@ -29,19 +30,28 @@ public class AudioWebSocketHandler extends BinaryWebSocketHandler {
     @Override
     public void afterConnectionEstablished(WebSocketSession session){
         String sessionId = getSessionId(session);
-        if (sessionId != null) {
-            System.out.println("✅ WebSocket 연결: " + sessionId);
-        } else {
-            System.out.println("⚠️ sessionId 없음: fallback to session.getId() → " + session.getId());
-        }
         clients.add(session);
-
+        System.out.println("✅ WebSocket 연결: " + sessionId);
+    
+        // React가 새로 연결되면 Python에게 start 명령 전송
+        if (clients.size() >= 2) {
+            for (WebSocketSession s : clients) {
+                if (s.isOpen() && !s.getId().equals(session.getId())) {
+                    try {
+                        s.sendMessage(new TextMessage("start"));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
     }
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status){
         String sessionId = getSessionId(session);
         clients.remove(session);
+        System.out.println("🔴 연결 종료 → 총 연결 수: " + clients.size());
         System.out.println("client disconnection " + sessionId);
         closeRecording(session);
     }
@@ -50,6 +60,13 @@ public class AudioWebSocketHandler extends BinaryWebSocketHandler {
     protected void handleBinaryMessage(WebSocketSession session, BinaryMessage message){
         byte[] payload = message.getPayload().array();
         String sessionId = getSessionId(session);
+
+        if (sessionId == null || sessionId.equals(session.getId())) {
+            System.out.println("❌ 유효하지 않은 sessionId, 저장 및 브로드캐스트 생략");
+            return;
+        }
+
+        System.out.println("📡 현재 연결된 clients 수: " + clients.size());
 
     // 브로드캐스트
     for (WebSocketSession client : clients) {
@@ -87,6 +104,7 @@ public class AudioWebSocketHandler extends BinaryWebSocketHandler {
         if (out != null) {
             try {
                 out.close();
+                
                 System.out.println("✅ 저장 완료: uploads/audio-" + sessionId + ".wav");
             } catch (IOException e) {
                 e.printStackTrace();

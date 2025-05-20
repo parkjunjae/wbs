@@ -1,9 +1,13 @@
 package com.wbs.wbs.config;
 
+import java.util.Map;
+
+import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServletServerHttpRequest;
+import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.server.HandshakeInterceptor;
 
-import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest; // ✅ 누락되어 있던 import
 
 public class WebSocketHandshakeInterceptor implements HandshakeInterceptor {
 
@@ -12,8 +16,6 @@ public class WebSocketHandshakeInterceptor implements HandshakeInterceptor {
                                    org.springframework.http.server.ServerHttpResponse response,
                                    WebSocketHandler wsHandler,
                                    Map<String, Object> attributes) {
-
-
          if (request instanceof ServletServerHttpRequest) {
         HttpServletRequest servletRequest = ((ServletServerHttpRequest) request).getServletRequest();
         String sessionId = servletRequest.getParameter("sessionId");
