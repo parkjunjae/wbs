@@ -34,7 +34,7 @@ public class DetailEntity {
 
     private String video;
 
-    private String comment;
+    private String comments;
 
     private Timestamp registration;
 
