@@ -13,6 +13,9 @@ import com.wbs.wbs.entity.TotalEntity;
 import com.wbs.wbs.service.TotalService;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 
 @RestController
@@ -40,5 +43,14 @@ public class TotalController {
         return ResponseEntity.ok(update); 
         
     }
+
+
+    @PostMapping("/robot/update")
+    public ResponseEntity<TotalEntity> getMac(@RequestBody TotalEntity totalEntity) {
+        TotalEntity entity = totalService.getMac(totalEntity);
+        
+        return ResponseEntity.ok(entity);
+    }
+    
 
 }

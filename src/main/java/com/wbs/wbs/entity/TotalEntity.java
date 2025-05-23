@@ -1,5 +1,9 @@
 package com.wbs.wbs.entity;
 
+import java.sql.Timestamp;
+
+import org.hibernate.annotations.DynamicUpdate;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.Column;
@@ -18,6 +22,7 @@ import lombok.Setter;
 @Data
 @Getter
 @Setter
+@DynamicUpdate
 public class TotalEntity {
 
     @Id
@@ -34,8 +39,14 @@ public class TotalEntity {
 
     private String mission;
 
-    @Column(name = "robot_condition")
-    private String robotCondition;
+    @Column(name="is_online")
+    private Boolean isOnline;
+
+    @Column(name="last_heartbeat")
+    private Timestamp lastHeartbeat;
+
+    @Column(name="mac", unique = true)
+    private String mac;
 
     @OneToOne(mappedBy="totalEntity")
     @JsonBackReference
