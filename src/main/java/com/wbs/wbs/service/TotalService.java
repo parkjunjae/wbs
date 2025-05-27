@@ -60,7 +60,7 @@ public class TotalService {
 
         TotalEntity total = optional.get();
         total.setBattery(totalEntity.getBattery());
-        total.setDelYn("N");
+        // total.setDelYn("N");
         total.setLatitude(totalEntity.getLatitude());
         total.setLongitude(totalEntity.getLongitude());
         total.setLastHeartbeat(Timestamp.valueOf(LocalDateTime.now()));
@@ -88,6 +88,28 @@ public class TotalService {
         }
 
         totalRepository.saveAll(robots);
+    }
+
+
+
+    public List<TotalEntity> getAll(){
+        List<TotalEntity> totalEntity = totalRepository.findAll();
+        if(totalEntity == null) {
+            return null;
+        }
+        return totalEntity;
+    }
+
+
+    public TotalEntity getDelyn(Long id, String newValue){
+        Optional<TotalEntity> totalEntity = totalRepository.findById(id);
+        if(totalEntity.isEmpty()) {
+            return null;
+        }
+        TotalEntity tEntity = totalEntity.get();
+        tEntity.setDelYn(newValue);
+
+        return totalRepository.save(tEntity);
     }
 
 
