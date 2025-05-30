@@ -33,8 +33,6 @@ public class TotalEntity {
     private String longitude;
     private String latitude;
     
-    private int battery;
-
     private String delYn;
 
     private String mission;

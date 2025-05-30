@@ -11,7 +11,7 @@ import com.wbs.wbs.entity.TotalEntity;
 @Repository
 public interface TotalRepository extends JpaRepository<TotalEntity, Long> {
 
-    List<TotalEntity> findByDelYnOrderByBatteryDesc(String delYn);
+    List<TotalEntity> findByDelYn(String delYn);
     Optional<TotalEntity> findById(Long id);
     
     Optional<TotalEntity> findByMac(String mac);

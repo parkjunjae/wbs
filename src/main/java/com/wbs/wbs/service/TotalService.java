@@ -23,7 +23,7 @@ public class TotalService {
     private final TotalRepository totalRepository;
 
     public List<TotalEntity> totalEntities(){
-        List<TotalEntity> list = totalRepository.findByDelYnOrderByBatteryDesc("N");
+        List<TotalEntity> list = totalRepository.findByDelYn("N");
         return list;
     }
 
@@ -48,7 +48,7 @@ public class TotalService {
         if(optional.isEmpty()) {
             TotalEntity newRobot = new TotalEntity();
             newRobot.setMac(totalEntity.getMac());
-            newRobot.setBattery(totalEntity.getBattery());
+            // newRobot.setBattery(totalEntity.getBattery());
             newRobot.setLatitude(totalEntity.getLatitude());
             newRobot.setLongitude(totalEntity.getLongitude());
             newRobot.setDelYn("Y");
@@ -59,7 +59,6 @@ public class TotalService {
         }
 
         TotalEntity total = optional.get();
-        total.setBattery(totalEntity.getBattery());
         // total.setDelYn("N");
         total.setLatitude(totalEntity.getLatitude());
         total.setLongitude(totalEntity.getLongitude());

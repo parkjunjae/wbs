@@ -7,8 +7,7 @@ import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.server.HandshakeInterceptor;
 
-import jakarta.servlet.http.HttpServletRequest; // ✅ 누락되어 있던 import
-
+import jakarta.servlet.http.HttpServletRequest; 
 public class WebSocketHandshakeInterceptor implements HandshakeInterceptor {
 
     @Override
