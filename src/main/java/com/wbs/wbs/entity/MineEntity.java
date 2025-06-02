@@ -2,7 +2,7 @@ package com.wbs.wbs.entity;
 
 import java.time.LocalDateTime;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,15 +13,15 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
-@Data
 @Table(name = "mine")
 @Getter
 @Setter
+@ToString(exclude = "totalEntity")
 public class MineEntity {
 
     @Id
@@ -44,10 +44,12 @@ public class MineEntity {
     @Column(name="mine_removal_status")
     private String mineRemovalStatus;
 
+    private String fileVedio;
+
     @ManyToOne(fetch=FetchType.EAGER)
-    @JoinColumn(name = "detail_id")
-    @JsonIgnoreProperties({"mineEntities"}) // 순환 방지
-    private DetailEntity detailEntity;
+    @JoinColumn(name = "name_id")
+    @JsonBackReference 
+    private TotalEntity totalEntity;
 
 
 

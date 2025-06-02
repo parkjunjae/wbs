@@ -2,6 +2,7 @@ package com.wbs.wbs.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 
@@ -13,6 +14,14 @@ public class Webconfig implements WebMvcConfigurer {
         corsRegistry.addMapping("/**")
                     .allowedOrigins("http://localhost:3000")
                     .allowedMethods("*");
+
+    }
+
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry){
+        registry.addResourceHandler("/video/**")
+                .addResourceLocations("file:/home/atoz/video/");
 
     }
     

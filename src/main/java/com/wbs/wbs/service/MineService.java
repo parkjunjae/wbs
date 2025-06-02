@@ -5,10 +5,11 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.wbs.wbs.entity.DetailEntity;
 import com.wbs.wbs.entity.MineEntity;
+import com.wbs.wbs.entity.TotalEntity;
 import com.wbs.wbs.repository.DetailRepository;
 import com.wbs.wbs.repository.MineRepository;
+import com.wbs.wbs.repository.TotalRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -18,19 +19,21 @@ public class MineService {
 
     private final MineRepository mineRepository;
     private final DetailRepository detailRepository;
+    private final TotalRepository totalRepository;
 
     public List<MineEntity> getMine(){
         List<MineEntity> mList = mineRepository.findAll();
         return mList;
     }
 
-    public Optional<MineEntity> getAudio(Long detailId){
-        Optional<DetailEntity> detailEntityOpt = detailRepository.findById(detailId);
-        if(detailEntityOpt.isEmpty()) {
-            return null;
+    public Optional<MineEntity> getAudio(String mac){
+        Optional<TotalEntity> totalOpt = totalRepository.findByMacIgnoreCase(mac);
+        System.out.println("🔍 totalEntity: " + totalOpt);
+        if(totalOpt.isEmpty()) {
+            return Optional.empty();
         }
-        DetailEntity detailEntity = detailEntityOpt.get(); 
-        return mineRepository.findFirstByDetailEntityOrderByTimeDesc(detailEntity);
+        TotalEntity totalEntity = totalOpt.get(); 
+        return mineRepository.findFirstByTotalEntityOrderByTimeDesc(totalEntity);
     }
 
     

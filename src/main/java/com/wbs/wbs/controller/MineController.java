@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wbs.wbs.entity.MineEntity;
+import com.wbs.wbs.repository.MineRepository;
 import com.wbs.wbs.service.MineService;
 
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 public class MineController {
 
     private final MineService mineService;
+    private final MineRepository mineRepository;
 
 
     @GetMapping("/mine")
@@ -36,9 +38,9 @@ public class MineController {
     }
 
 
-    @GetMapping("/play/{detailId}")
-    public ResponseEntity<Resource> getMethodName(@PathVariable("detailId") Long detailId) {
-        Optional<MineEntity> optionalAudio = mineService.getAudio(detailId);
+    @GetMapping("/play/{mac}")
+    public ResponseEntity<Resource> getMethodName(@PathVariable("mac") String mac) {
+        Optional<MineEntity> optionalAudio = mineService.getAudio(mac);
 
         if(optionalAudio.isEmpty()) {
             return ResponseEntity.notFound().build();
@@ -57,5 +59,9 @@ public class MineController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, "inline/filename=\"" + mineEntity.getFilename() + "\"")
                 .body(resource);
     }
+
+    
+
+
     
 }
