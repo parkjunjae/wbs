@@ -32,6 +32,7 @@ public class TotalController {
         if (getTotal == null || getTotal.isEmpty()) {
             return ResponseEntity.noContent().build();  
         }
+        
         return ResponseEntity.ok(getTotal);
     }
 
