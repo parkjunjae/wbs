@@ -15,11 +15,11 @@ public class RobotController {
 
     @PostMapping("/register")
     public ResponseEntity<String> registerRobot(@RequestBody RobotRegisterDto dto) {
-        RobotEntity robot = robotRepository.findByMac(dto.getMac())
-            .orElse(new RobotEntity());
+        RobotEntity robot = robotRepository.findByMac(dto.getMac()).orElse(new RobotEntity());
         robot.setMac(dto.getMac());
-        robot.setIp(dto.getIp());
-        robot.setRobotName(dto.getRobotName());
+        robot.setLatitude(dto.getLatitude());
+        robot.setLongitude(dto.getLongitude());
+        robot.setBattery(dto.getBattery());
         robotRepository.save(robot);
         return ResponseEntity.ok("등록 또는 갱신 완료");
     }
