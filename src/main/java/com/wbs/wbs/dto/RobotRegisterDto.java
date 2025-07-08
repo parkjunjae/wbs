@@ -9,4 +9,5 @@ public class RobotRegisterDto {
     private String latitude;
     private String longitude;
     private Integer battery;
+    private String ip;
 }

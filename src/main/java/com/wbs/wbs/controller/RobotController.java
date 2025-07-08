@@ -20,6 +20,7 @@ public class RobotController {
         robot.setLatitude(dto.getLatitude());
         robot.setLongitude(dto.getLongitude());
         robot.setBattery(dto.getBattery());
+        robot.setIp(dto.getIp());
         robotRepository.save(robot);
         return ResponseEntity.ok("등록 또는 갱신 완료");
     }

@@ -16,6 +16,7 @@ public class RobotEntity {
     private Integer battery;
     private String latitude;
     private String longitude;
+    private String ip;
 
     @Column(unique = true)
     private String mac;
