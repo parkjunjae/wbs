@@ -49,6 +49,9 @@ public class TotalEntity {
     @Column(name="mac", unique = true)
     private String mac;
 
+    @Column(name = "battery")
+    private Integer battery;
+
     @OneToMany(mappedBy = "totalEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<MineEntity> mineEntities = new ArrayList<>();
