@@ -55,6 +55,4 @@ public class TotalEntity {
     @OneToMany(mappedBy = "totalEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<MineEntity> mineEntities = new ArrayList<>();
-
-
 }

@@ -17,22 +17,17 @@ import com.wbs.wbs.service.TotalService;
 
 import lombok.RequiredArgsConstructor;
 
-
-
-
 @RestController
 @RequiredArgsConstructor
 public class TotalController {
     private final TotalService totalService;
 
-
     @GetMapping("/data")
-    public ResponseEntity<List<TotalEntity>> totalEntities(){
+    public ResponseEntity<List<TotalEntity>> totalEntities() {
         List<TotalEntity> getTotal = totalService.totalEntities();
         if (getTotal == null || getTotal.isEmpty()) {
-            return ResponseEntity.noContent().build();  
+            return ResponseEntity.noContent().build();
         }
-        
         return ResponseEntity.ok(getTotal);
     }
 
@@ -40,26 +35,28 @@ public class TotalController {
     public ResponseEntity<Optional<TotalEntity>> updateData(@PathVariable("id") Long id) {
         Optional<TotalEntity> update = totalService.updateData(id);
 
-        if(update.isEmpty()){
+        if (update.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
-        return ResponseEntity.ok(update); 
-        
+        return ResponseEntity.ok(update);
     }
-
 
     @PostMapping("/robot/update")
-    public ResponseEntity<TotalEntity> getMac(@RequestBody TotalEntity totalEntity) {
+    public ResponseEntity<TotalEntity> postMac(@RequestBody TotalEntity totalEntity) {
         TotalEntity entity = totalService.getMac(totalEntity);
-        
         return ResponseEntity.ok(entity);
     }
-    
+
+    @PutMapping("/robot/update")
+    public ResponseEntity<TotalEntity> putMac(@RequestBody TotalEntity totalEntity) {
+        TotalEntity entity = totalService.getMac(totalEntity);
+        return ResponseEntity.ok(entity);
+    }
 
     @GetMapping("/get")
     public ResponseEntity<List<TotalEntity>> getAll() {
         List<TotalEntity> totalEntity = totalService.getAll();
-        if(totalEntity == null) {
+        if (totalEntity == null) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(totalEntity);
@@ -69,11 +66,9 @@ public class TotalController {
     public ResponseEntity<TotalEntity> putDelyn(@PathVariable("id") Long id, @RequestBody Map<String, String> value) {
         String newValue = value.get("delYn");
         TotalEntity totalEntity = totalService.getDelyn(id, newValue);
-        if(totalEntity == null) {
-           return ResponseEntity.status(404).build();
+        if (totalEntity == null) {
+            return ResponseEntity.status(404).build();
         }
         return ResponseEntity.ok(totalEntity);
     }
-    
-
 }
