@@ -33,16 +33,17 @@ public class TotalService {
         if (findOptional.isEmpty()) {
             return Optional.empty();
         }
-
         TotalEntity tEntity = findOptional.get();
         tEntity.setDelYn("Y");
         totalRepository.save(tEntity);
-
         return Optional.of(tEntity);
     }
 
+    // ✅ 데이터 올 때마다 하트비트 항상 갱신!
     public TotalEntity getMac(TotalEntity totalEntity) {
         Optional<TotalEntity> optional = totalRepository.findByMac(totalEntity.getMac());
+        Timestamp now = Timestamp.valueOf(LocalDateTime.now());
+
         if (optional.isEmpty()) {
             // 신규 등록
             TotalEntity newRobot = new TotalEntity();
@@ -51,72 +52,57 @@ public class TotalService {
             newRobot.setLatitude(totalEntity.getLatitude());
             newRobot.setLongitude(totalEntity.getLongitude());
             newRobot.setDelYn("N");
-            newRobot.setIsOnline(totalEntity.getIsOnline());
-            if (Boolean.FALSE.equals(totalEntity.getIsOnline())) {
-                newRobot.setLastHeartbeat(Timestamp.valueOf(LocalDateTime.now()));
-            } else {
-                newRobot.setLastHeartbeat(null);
-            }
+            newRobot.setIsOnline(true);  // 데이터 오면 무조건 온라인!
+            newRobot.setLastHeartbeat(now); // 하트비트 항상 저장
             return totalRepository.save(newRobot);
         }
 
         // 기존 등록
         TotalEntity total = optional.get();
 
-        boolean wasOnline = Boolean.TRUE.equals(total.getIsOnline());
-        boolean nowOnline = Boolean.TRUE.equals(totalEntity.getIsOnline());
-
         total.setBattery(totalEntity.getBattery());
         total.setLatitude(totalEntity.getLatitude());
         total.setLongitude(totalEntity.getLongitude());
-
-        // online→offline 전환 시에만 lastHeartbeat 기록
-        if (wasOnline && !nowOnline) {
-            total.setLastHeartbeat(Timestamp.valueOf(LocalDateTime.now()));
-        }
-        // offline → online 혹은 그대로 online이면 lastHeartbeat를 null로(공란)
-        if (nowOnline) {
-            total.setLastHeartbeat(null);
-        }
-
-        total.setIsOnline(nowOnline);
+        total.setIsOnline(true); // 데이터 올 때마다 무조건 온라인!
+        total.setDelYn("N");
+        total.setLastHeartbeat(now); // 하트비트 항상 갱신
 
         return totalRepository.save(total);
     }
 
-@Scheduled(fixedRate = 10000)
-public void checkOnlineStatus() {
-    System.out.println("스케줄러 동작중!!");
-    List<TotalEntity> robots = totalRepository.findAll();
-    LocalDateTime now = LocalDateTime.now();
-    boolean changed = false;
-    for (TotalEntity robot : robots) {
-        Timestamp last = robot.getLastHeartbeat();
-        Boolean isOnline = robot.getIsOnline();
-        // online이면 last_heartbeat가 null이어도 10초 지난 걸로 간주
-        if (isOnline != null && isOnline) {
-            boolean needOffline = false;
-            if (last == null) {
-                // last_heartbeat가 null인데 online이면 10초 지난 걸로 판단 (즉시 offline)
-                needOffline = true;
-            } else {
-                Duration diff = Duration.between(last.toLocalDateTime(), now);
-                if (diff.getSeconds() > 20) {
+    // ✅ 하트비트 기준 40초 이상 데이터 없으면 오프라인 판정
+    @Scheduled(fixedRate = 3000)
+    public void checkOnlineStatus() {
+        List<TotalEntity> robots = totalRepository.findAll();
+        LocalDateTime now = LocalDateTime.now();
+        boolean changed = false;
+        for (TotalEntity robot : robots) {
+            Timestamp last = robot.getLastHeartbeat();
+            if (Boolean.TRUE.equals(robot.getIsOnline())) {
+                boolean needOffline = false;
+                long diff = -1;
+                if (last == null) {
                     needOffline = true;
+                } else {
+                    diff = Duration.between(last.toLocalDateTime(), now).getSeconds();
+                    if (diff > 20) {
+                        needOffline = true;
+                    }
+                }
+                if (needOffline) {
+                    System.out.printf(">> OFFLINE 처리: id=%d mac=%s diff=%d초 now=%s\n", 
+                        robot.getId(), robot.getMac(), diff, now);
+                    robot.setIsOnline(false);
+                    robot.setDelYn("Y");
+                    robot.setLastHeartbeat(Timestamp.valueOf(now));
+                    changed = true;
                 }
             }
-            if (needOffline) {
-                robot.setIsOnline(false);
-                robot.setLastHeartbeat(Timestamp.valueOf(now));
-                changed = true;
-            }
+        }
+        if (changed) {
+            totalRepository.saveAll(robots);
         }
     }
-    if (changed) {
-        totalRepository.saveAll(robots);
-    }
-}
-
 
     public List<TotalEntity> getAll() {
         return totalRepository.findAll();
