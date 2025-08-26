@@ -52,6 +52,9 @@ public class TotalEntity {
     @Column(name = "battery")
     private Integer battery;
 
+    @Column(name = "ip")
+    private String ip;
+
     @OneToMany(mappedBy = "totalEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<MineEntity> mineEntities = new ArrayList<>();

@@ -22,9 +22,6 @@ import com.wbs.wbs.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
-
-
-
 @Controller
 @RequiredArgsConstructor
 public class UserController {
@@ -43,8 +40,8 @@ public class UserController {
             return ResponseEntity.status(401).body("비밀번호 불일치");
         }
         String token = jwtUtil.generateToken(user.getName(), user.getRole(), user.getMilitaryRank());
-        
-        Map<String, String> body = Map.of("token",token);
+
+        Map<String, String> body = Map.of("token", token);
         return ResponseEntity.ok(body);
     }
 
@@ -58,7 +55,7 @@ public class UserController {
         user.setName(req.getName());
         user.setPasswd(passwordEncoder.encode(req.getPasswd()));
         user.setDelYn("N");
-        user.setRole("USER");
+        user.setRole("ADMIN");
         userRepository.save(user);
 
         return ResponseEntity.ok("회원가입 성공");
@@ -66,7 +63,8 @@ public class UserController {
 
     @GetMapping("/user/me")
     public ResponseEntity<UserInfoResponse> getMyInfo(@AuthenticationPrincipal CustomUserDetails userDetails) {
-        UserEntity user = userRepository.findByMilitaryRankAndName(userDetails.getRank(), userDetails.getUsername()).orElseThrow(() -> new RuntimeException("사용자 정보를 찾을 수 없습니다."));
+        UserEntity user = userRepository.findByMilitaryRankAndName(userDetails.getRank(), userDetails.getUsername())
+                .orElseThrow(() -> new RuntimeException("사용자 정보를 찾을 수 없습니다."));
 
         UserInfoResponse dto = new UserInfoResponse();
         dto.setName(user.getName());
@@ -75,10 +73,11 @@ public class UserController {
         return ResponseEntity.ok(dto);
     }
 
-
     @PutMapping("/user/update")
-    public ResponseEntity<?> updateProfile(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestBody  ProfileUpdateRequest req) {
-        UserEntity user = userRepository.findByMilitaryRankAndName(userDetails.getRank(), userDetails.getUsername()).orElseThrow(() -> new RuntimeException("사용자 정보를 찾을 수 없습니다."));
+    public ResponseEntity<?> updateProfile(@AuthenticationPrincipal CustomUserDetails userDetails,
+            @RequestBody ProfileUpdateRequest req) {
+        UserEntity user = userRepository.findByMilitaryRankAndName(userDetails.getRank(), userDetails.getUsername())
+                .orElseThrow(() -> new RuntimeException("사용자 정보를 찾을 수 없습니다."));
 
         if (!passwordEncoder.matches(req.getCurrentPassword(), user.getPasswd())) {
             return ResponseEntity.status(401).body("현재 비밀번호가 일치 하지않습니다.");
@@ -90,11 +89,7 @@ public class UserController {
         }
         userRepository.save(user);
 
-        
         return ResponseEntity.ok().body("수정완료");
     }
-    
-    
-    
-    
+
 }
