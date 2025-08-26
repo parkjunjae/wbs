@@ -70,7 +70,7 @@ public class TotalService {
         return totalRepository.save(total);
     }
 
-    // ✅ 하트비트 기준 40초 이상 데이터 없으면 오프라인 판정
+    // ✅ 하트비트 기준 20초 이상 데이터 없으면 오프라인 판정
     @Scheduled(fixedRate = 3000)
     public void checkOnlineStatus() {
         List<TotalEntity> robots = totalRepository.findAll();
