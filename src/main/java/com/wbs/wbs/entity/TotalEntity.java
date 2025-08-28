@@ -40,6 +40,8 @@ public class TotalEntity {
 
     private String mode;
 
+    private String func;
+
     @Column(name="is_online")
     private Boolean isOnline;
 
