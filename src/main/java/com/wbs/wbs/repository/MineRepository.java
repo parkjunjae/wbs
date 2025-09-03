@@ -8,10 +8,13 @@ import org.springframework.stereotype.Repository;
 import com.wbs.wbs.entity.MineEntity;
 import com.wbs.wbs.entity.TotalEntity;
 
+
 @Repository
 public interface MineRepository extends JpaRepository<MineEntity, Long> {
 
     Optional<MineEntity> findFirstByTotalEntityOrderByTimeDesc(TotalEntity totalEntity);
+
+    Optional<MineEntity> findByMineId(Long mineId);
 
 
 }
