@@ -41,7 +41,7 @@ public class CustomUserDetails implements UserDetails {
     }
     @Override
     public boolean isEnabled() {
-        return true;
+        return !"Y".equalsIgnoreCase(user.getDelYn());
     }
 
     public String getRank() {

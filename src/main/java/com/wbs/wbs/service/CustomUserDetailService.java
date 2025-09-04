@@ -1,5 +1,6 @@
 package com.wbs.wbs.service;
 
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -28,6 +29,10 @@ public class CustomUserDetailService implements UserDetailsService {
         String militaryRank = parts[1];
         UserEntity user = userRepository.findByMilitaryRankAndName(militaryRank, name)
             .orElseThrow(() -> new UsernameNotFoundException("사용자 없음"));
+
+        if ("Y".equalsIgnoreCase(user.getDelYn())) {
+            throw new DisabledException("사용중지된 계정");
+        }
             
         return new CustomUserDetails(user);
     } 

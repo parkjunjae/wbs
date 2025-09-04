@@ -13,5 +13,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     Optional<UserEntity> findByMilitaryRankAndName(String militaryRank, String name);
     
     List<UserEntity> findByName(String name);
+
+    List<UserEntity> findAllByOrderByUserIdAsc();
     
 }

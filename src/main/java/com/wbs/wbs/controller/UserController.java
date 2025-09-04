@@ -1,5 +1,6 @@
 package com.wbs.wbs.controller;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -8,6 +9,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,12 +17,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import com.wbs.wbs.config.JwtUtil;
 import com.wbs.wbs.dto.LoginRequest;
 import com.wbs.wbs.dto.ProfileUpdateRequest;
+import com.wbs.wbs.dto.UserAdminDto;
 import com.wbs.wbs.dto.UserInfoResponse;
 import com.wbs.wbs.entity.CustomUserDetails;
 import com.wbs.wbs.entity.UserEntity;
 import com.wbs.wbs.repository.UserRepository;
+import com.wbs.wbs.service.UserAdminService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+
+
 
 @Controller
 @RequiredArgsConstructor
@@ -28,6 +35,7 @@ public class UserController {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
+    private final UserAdminService userService;
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest req) {
@@ -91,5 +99,17 @@ public class UserController {
 
         return ResponseEntity.ok().body("수정완료");
     }
+
+
+    @GetMapping("/user")
+    public ResponseEntity<List<UserAdminDto.UserSummaryRes>> list() {
+        return ResponseEntity.ok(userService.listUser());
+    }
+
+    @PutMapping("/{id}/del-yn")
+    public ResponseEntity<UserAdminDto.UserSummaryRes> putMethodName(@PathVariable Long id, @Valid @RequestBody UserAdminDto.UpdateDelYnReq req) {
+        return ResponseEntity.ok(userService.updateDel(id, req.delYn()));
+    }
+    
 
 }
