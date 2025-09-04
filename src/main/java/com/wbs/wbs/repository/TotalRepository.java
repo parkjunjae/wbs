@@ -18,4 +18,6 @@ public interface TotalRepository extends JpaRepository<TotalEntity, Long> {
 
     Optional<TotalEntity> findByMacIgnoreCase(String mac);
 
+    List<TotalEntity> findByFunc(String func);
+
 }
