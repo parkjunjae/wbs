@@ -44,9 +44,15 @@ public class UserController {
             return ResponseEntity.status(401).body("사용자 없음");
         }
         UserEntity user = useropt.get();
+
+        if ("Y".equalsIgnoreCase(user.getDelYn())) {
+            return ResponseEntity.status(401).body("사용중지된 계정"); // or "disabled"
+        }
+        
         if (!passwordEncoder.matches(req.getPasswd(), user.getPasswd())) {
             return ResponseEntity.status(401).body("비밀번호 불일치");
         }
+
         String token = jwtUtil.generateToken(user.getName(), user.getRole(), user.getMilitaryRank());
 
         Map<String, String> body = Map.of("token", token);
@@ -63,7 +69,7 @@ public class UserController {
         user.setName(req.getName());
         user.setPasswd(passwordEncoder.encode(req.getPasswd()));
         user.setDelYn("N");
-        user.setRole("ADMIN");
+        user.setRole("USER");
         userRepository.save(user);
 
         return ResponseEntity.ok("회원가입 성공");
